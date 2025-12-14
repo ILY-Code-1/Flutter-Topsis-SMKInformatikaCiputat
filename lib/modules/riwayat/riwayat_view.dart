@@ -85,6 +85,15 @@ class RiwayatView extends GetView<RiwayatController> {
             ],
           ),
         ),
+        ElevatedButton.icon(
+          onPressed: controller.getFirebaseData,
+          icon: const Icon(Icons.cloud_download),
+          label: const Text('Get Firebase Data'),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.primary,
+            foregroundColor: Colors.white,
+          ),
+        ),
       ],
     );
   }

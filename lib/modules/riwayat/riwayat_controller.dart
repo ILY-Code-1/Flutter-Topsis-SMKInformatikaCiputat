@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../data/models/riwayat_model.dart';
 import '../../data/services/riwayat_service.dart';
 import '../../app/routes/app_routes.dart';
@@ -40,5 +42,16 @@ class RiwayatController extends GetxController {
 
   void goHome() {
     Get.offAllNamed(AppRoutes.home);
+  }
+
+  Future<void> getFirebaseData() async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('topsis')
+        .get();
+
+    for (var doc in snapshot.docs) {
+      print("ID: ${doc.id}");
+      print("DATA: ${doc.data()}");
+    }
   }
 }
