@@ -50,8 +50,14 @@ class _HeroSectionState extends State<HeroSection> {
             ),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: isMobile ? AppConstants.paddingLG : AppConstants.paddingXL),
+          const SizedBox(height: AppConstants.paddingMD),
+          _buildDownloadTemplateLink(isMobile),
+          SizedBox(
+            height: isMobile ? AppConstants.paddingLG : AppConstants.paddingXL,
+          ),
           _buildDropzone(context),
+          // const SizedBox(height: AppConstants.paddingLG),
+          // _buildTestingButtons(isMobile),
           const SizedBox(height: AppConstants.paddingXL),
         ],
       ),
@@ -81,7 +87,9 @@ class _HeroSectionState extends State<HeroSection> {
                   : AppColors.surface,
               borderRadius: BorderRadius.circular(AppConstants.borderRadiusLG),
               border: Border.all(
-                color: isHovering ? AppColors.primary : AppColors.dropzoneBorder,
+                color: isHovering
+                    ? AppColors.primary
+                    : AppColors.dropzoneBorder,
                 width: 2,
                 strokeAlign: BorderSide.strokeAlignInside,
               ),
@@ -130,10 +138,7 @@ class _HeroSectionState extends State<HeroSection> {
               padding: const EdgeInsets.only(top: AppConstants.paddingMD),
               child: Text(
                 error,
-                style: const TextStyle(
-                  color: AppColors.error,
-                  fontSize: 14,
-                ),
+                style: const TextStyle(color: AppColors.error, fontSize: 14),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -141,6 +146,94 @@ class _HeroSectionState extends State<HeroSection> {
       );
     });
   }
+
+  Widget _buildDownloadTemplateLink(bool isMobile) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: controller.downloadTemplate,
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppConstants.paddingMD,
+            vertical: AppConstants.paddingSM,
+          ),
+          decoration: BoxDecoration(
+            color: AppColors.primary.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(AppConstants.borderRadiusSM),
+            border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.download,
+                size: isMobile ? 16 : 18,
+                color: AppColors.primary,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'Download Template Excel',
+                style: TextStyle(
+                  fontSize: isMobile ? 12 : 14,
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Widget _buildTestingButtons(bool isMobile) {
+  //   return Container(
+  //     padding: const EdgeInsets.all(AppConstants.paddingMD),
+  //     decoration: BoxDecoration(
+  //       color: Colors.amber.withOpacity(0.1),
+  //       borderRadius: BorderRadius.circular(AppConstants.borderRadiusMD),
+  //       border: Border.all(color: Colors.amber.withOpacity(0.5)),
+  //     ),
+  //     child: Column(
+  //       children: [
+  //         Text(
+  //           '🧪 Testing Area (Hapus setelah development)',
+  //           style: TextStyle(
+  //             fontSize: isMobile ? 12 : 14,
+  //             fontWeight: FontWeight.bold,
+  //             color: Colors.amber[800],
+  //           ),
+  //         ),
+  //         const SizedBox(height: AppConstants.paddingMD),
+  //         Wrap(
+  //           spacing: AppConstants.paddingSM,
+  //           runSpacing: AppConstants.paddingSM,
+  //           alignment: WrapAlignment.center,
+  //           children: [
+  //             _TestButton(
+  //               label: 'Test Key',
+  //               icon: Icons.key,
+  //               onTap: controller.testKeyGenerator,
+  //               isMobile: isMobile,
+  //             ),
+  //             _TestButton(
+  //               label: 'Test Firebase',
+  //               icon: Icons.cloud,
+  //               onTap: controller.testFirebaseService,
+  //               isMobile: isMobile,
+  //             ),
+  //             _TestButton(
+  //               label: 'Test PDF',
+  //               icon: Icons.picture_as_pdf,
+  //               onTap: controller.testPdfService,
+  //               isMobile: isMobile,
+  //             ),
+  //           ],
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _buildDropzoneContent(BuildContext context, bool isHovering) {
     final isMobile = ResponsiveHelper.isMobile(context);
@@ -158,10 +251,7 @@ class _HeroSectionState extends State<HeroSection> {
           ),
         ),
         const SizedBox(height: AppConstants.paddingMD),
-        _UploadButton(
-          onTap: controller.pickFile,
-          isMobile: isMobile,
-        ),
+        _UploadButton(onTap: controller.pickFile, isMobile: isMobile),
         const SizedBox(height: AppConstants.paddingMD),
         Text(
           'Atau Drop File Kesini',
@@ -226,3 +316,37 @@ class _UploadButtonState extends State<_UploadButton> {
     );
   }
 }
+
+// class _TestButton extends StatelessWidget {
+//   final String label;
+//   final IconData icon;
+//   final VoidCallback onTap;
+//   final bool isMobile;
+
+//   const _TestButton({
+//     required this.label,
+//     required this.icon,
+//     required this.onTap,
+//     required this.isMobile,
+//   });
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return ElevatedButton.icon(
+//       onPressed: onTap,
+//       icon: Icon(icon, size: isMobile ? 14 : 16),
+//       label: Text(
+//         label,
+//         style: TextStyle(fontSize: isMobile ? 11 : 12),
+//       ),
+//       style: ElevatedButton.styleFrom(
+//         backgroundColor: Colors.amber[700],
+//         foregroundColor: Colors.white,
+//         padding: EdgeInsets.symmetric(
+//           horizontal: isMobile ? 12 : 16,
+//           vertical: isMobile ? 8 : 10,
+//         ),
+//       ),
+//     );
+//   }
+// }

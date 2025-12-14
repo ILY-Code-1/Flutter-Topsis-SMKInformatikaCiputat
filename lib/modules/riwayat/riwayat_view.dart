@@ -21,10 +21,7 @@ class RiwayatView extends GetView<RiwayatController> {
           Expanded(
             child: SingleChildScrollView(
               child: Column(
-                children: [
-                  _buildContent(context),
-                  const AppFooter(),
-                ],
+                children: [_buildContent(context), const AppFooter()],
               ),
             ),
           ),
@@ -77,23 +74,20 @@ class RiwayatView extends GetView<RiwayatController> {
               const SizedBox(height: AppConstants.paddingXS),
               const Text(
                 'Lihat dan kelola semua hasil perhitungan TOPSIS sebelumnya',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: AppColors.textSecondary,
-                ),
+                style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
               ),
             ],
           ),
         ),
-        ElevatedButton.icon(
-          onPressed: controller.getFirebaseData,
-          icon: const Icon(Icons.cloud_download),
-          label: const Text('Get Firebase Data'),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.primary,
-            foregroundColor: Colors.white,
-          ),
-        ),
+        // ElevatedButton.icon(
+        //   onPressed: controller.getFirebaseData,
+        //   icon: const Icon(Icons.cloud_download),
+        //   label: const Text('Get Firebase Data'),
+        //   style: ElevatedButton.styleFrom(
+        //     backgroundColor: AppColors.primary,
+        //     foregroundColor: Colors.white,
+        //   ),
+        // ),
       ],
     );
   }
@@ -114,12 +108,14 @@ class RiwayatView extends GetView<RiwayatController> {
           children: [
             _buildListHeader(context, riwayatList.length),
             const SizedBox(height: AppConstants.paddingMD),
-            ...riwayatList.map((riwayat) => _RiwayatCard(
-              riwayat: riwayat,
-              isMobile: isMobile,
-              onView: () => controller.lihatDetail(riwayat.id),
-              onDelete: () => _showDeleteDialog(context, riwayat.id),
-            )),
+            ...riwayatList.map(
+              (riwayat) => _RiwayatCard(
+                riwayat: riwayat,
+                isMobile: isMobile,
+                onView: () => controller.lihatDetail(riwayat.id),
+                onDelete: () => _showDeleteDialog(context, riwayat.id),
+              ),
+            ),
           ],
         );
       },
@@ -155,13 +151,13 @@ class RiwayatView extends GetView<RiwayatController> {
             ],
           ),
         ),
-        if (count > 0)
-          _SmallButton(
-            label: 'Hapus Semua',
-            icon: Icons.delete_sweep,
-            color: AppColors.error,
-            onTap: () => _showClearAllDialog(context),
-          ),
+        // if (count > 0)
+        //   _SmallButton(
+        //     label: 'Hapus Semua',
+        //     icon: Icons.delete_sweep,
+        //     color: AppColors.error,
+        //     onTap: () => _showClearAllDialog(context),
+        //   ),
       ],
     );
   }
@@ -208,10 +204,7 @@ class RiwayatView extends GetView<RiwayatController> {
           const SizedBox(height: AppConstants.paddingSM),
           const Text(
             'Upload file Excel untuk memulai perhitungan TOPSIS',
-            style: TextStyle(
-              fontSize: 14,
-              color: AppColors.textSecondary,
-            ),
+            style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: AppConstants.paddingLG),
@@ -226,60 +219,33 @@ class RiwayatView extends GetView<RiwayatController> {
   }
 
   void _showDeleteDialog(BuildContext context, String id) {
-    Get.dialog(
-      AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppConstants.borderRadiusMD),
-        ),
-        title: const Text('Hapus Riwayat'),
-        content: const Text('Apakah Anda yakin ingin menghapus riwayat ini?'),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Batal'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Get.back();
-              controller.confirmHapusRiwayat(id);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.error,
-            ),
-            child: const Text('Hapus'),
-          ),
-        ],
-      ),
-    );
+    controller.confirmHapusRiwayat(id);
   }
 
-  void _showClearAllDialog(BuildContext context) {
-    Get.dialog(
-      AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppConstants.borderRadiusMD),
-        ),
-        title: const Text('Hapus Semua Riwayat'),
-        content: const Text('Apakah Anda yakin ingin menghapus semua riwayat? Tindakan ini tidak dapat dibatalkan.'),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Batal'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Get.back();
-              controller.clearAllRiwayat();
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.error,
-            ),
-            child: const Text('Hapus Semua'),
-          ),
-        ],
-      ),
-    );
-  }
+  // void _showClearAllDialog(BuildContext context) {
+  //   Get.dialog(
+  //     AlertDialog(
+  //       shape: RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.circular(AppConstants.borderRadiusMD),
+  //       ),
+  //       title: const Text('Hapus Semua Riwayat'),
+  //       content: const Text(
+  //         'Apakah Anda yakin ingin menghapus semua riwayat? Tindakan ini tidak dapat dibatalkan.',
+  //       ),
+  //       actions: [
+  //         TextButton(onPressed: () => Get.back(), child: const Text('Batal')),
+  //         ElevatedButton(
+  //           onPressed: () {
+  //             Get.back();
+  //             controller.clearAllRiwayat();
+  //           },
+  //           style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
+  //           child: const Text('Hapus Semua'),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }
 
 class _RiwayatCard extends StatefulWidget {
@@ -305,7 +271,9 @@ class _RiwayatCardState extends State<_RiwayatCard> {
   @override
   Widget build(BuildContext context) {
     final dateFormat = DateFormat('dd MMM yyyy, HH:mm');
-    final topSiswa = widget.riwayat.hasil.isNotEmpty ? widget.riwayat.hasil.first : null;
+    final topSiswa = widget.riwayat.hasil.isNotEmpty
+        ? widget.riwayat.hasil.first
+        : null;
 
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovering = true),
@@ -313,12 +281,16 @@ class _RiwayatCardState extends State<_RiwayatCard> {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         margin: const EdgeInsets.only(bottom: AppConstants.paddingMD),
-        padding: EdgeInsets.all(widget.isMobile ? AppConstants.paddingMD : AppConstants.paddingLG),
+        padding: EdgeInsets.all(
+          widget.isMobile ? AppConstants.paddingMD : AppConstants.paddingLG,
+        ),
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(AppConstants.borderRadiusLG),
           border: Border.all(
-            color: _isHovering ? AppColors.primary.withOpacity(0.3) : Colors.transparent,
+            color: _isHovering
+                ? AppColors.primary.withOpacity(0.3)
+                : Colors.transparent,
           ),
           boxShadow: [
             BoxShadow(
@@ -368,7 +340,11 @@ class _RiwayatCardState extends State<_RiwayatCard> {
               const SizedBox(height: AppConstants.paddingXS),
               Row(
                 children: [
-                  Icon(Icons.calendar_today, size: 14, color: AppColors.textSecondary),
+                  Icon(
+                    Icons.calendar_today,
+                    size: 14,
+                    color: AppColors.textSecondary,
+                  ),
                   const SizedBox(width: 4),
                   Text(
                     dateFormat.format(widget.riwayat.tanggal),
@@ -401,12 +377,18 @@ class _RiwayatCardState extends State<_RiwayatCard> {
             decoration: BoxDecoration(
               color: const Color(0xFFFFD700).withOpacity(0.1),
               borderRadius: BorderRadius.circular(AppConstants.borderRadiusSM),
-              border: Border.all(color: const Color(0xFFFFD700).withOpacity(0.3)),
+              border: Border.all(
+                color: const Color(0xFFFFD700).withOpacity(0.3),
+              ),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.emoji_events, color: Color(0xFFFFD700), size: 16),
+                const Icon(
+                  Icons.emoji_events,
+                  color: Color(0xFFFFD700),
+                  size: 16,
+                ),
                 const SizedBox(width: 4),
                 Text(
                   topSiswa.nama,
@@ -451,7 +433,9 @@ class _RiwayatCardState extends State<_RiwayatCard> {
               padding: const EdgeInsets.all(AppConstants.paddingSM),
               decoration: BoxDecoration(
                 color: AppColors.primary.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(AppConstants.borderRadiusSM),
+                borderRadius: BorderRadius.circular(
+                  AppConstants.borderRadiusSM,
+                ),
               ),
               child: const Icon(
                 Icons.description,
@@ -476,18 +460,28 @@ class _RiwayatCardState extends State<_RiwayatCard> {
         const SizedBox(height: AppConstants.paddingSM),
         Row(
           children: [
-            Icon(Icons.calendar_today, size: 12, color: AppColors.textSecondary),
+            Icon(
+              Icons.calendar_today,
+              size: 12,
+              color: AppColors.textSecondary,
+            ),
             const SizedBox(width: 4),
             Text(
               dateFormat.format(widget.riwayat.tanggal),
-              style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+              style: const TextStyle(
+                fontSize: 12,
+                color: AppColors.textSecondary,
+              ),
             ),
             const SizedBox(width: AppConstants.paddingSM),
             Icon(Icons.people, size: 12, color: AppColors.textSecondary),
             const SizedBox(width: 4),
             Text(
               '${widget.riwayat.jumlahSiswa} siswa',
-              style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+              style: const TextStyle(
+                fontSize: 12,
+                color: AppColors.textSecondary,
+              ),
             ),
           ],
         ),
@@ -505,11 +499,18 @@ class _RiwayatCardState extends State<_RiwayatCard> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.emoji_events, color: Color(0xFFFFD700), size: 14),
+                const Icon(
+                  Icons.emoji_events,
+                  color: Color(0xFFFFD700),
+                  size: 14,
+                ),
                 const SizedBox(width: 4),
                 Text(
                   'Top: ${topSiswa.nama}',
-                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ],
             ),
@@ -565,7 +566,9 @@ class _BackButtonState extends State<_BackButton> {
           duration: const Duration(milliseconds: 200),
           padding: const EdgeInsets.all(AppConstants.paddingSM),
           decoration: BoxDecoration(
-            color: _isHovering ? AppColors.primary.withOpacity(0.1) : Colors.transparent,
+            color: _isHovering
+                ? AppColors.primary.withOpacity(0.1)
+                : Colors.transparent,
             borderRadius: BorderRadius.circular(AppConstants.borderRadiusSM),
           ),
           child: Icon(
@@ -615,7 +618,9 @@ class _SmallButtonState extends State<_SmallButton> {
             vertical: 6,
           ),
           decoration: BoxDecoration(
-            color: _isHovering ? widget.color.withOpacity(0.1) : Colors.transparent,
+            color: _isHovering
+                ? widget.color.withOpacity(0.1)
+                : Colors.transparent,
             borderRadius: BorderRadius.circular(AppConstants.borderRadiusSM),
             border: Border.all(
               color: _isHovering ? widget.color : widget.color.withOpacity(0.5),

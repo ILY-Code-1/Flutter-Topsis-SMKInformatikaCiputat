@@ -53,13 +53,28 @@ class ExcelService {
     if (siswaList.isEmpty) return [];
 
     final kriteriaNama = siswaList.first.nilai.keys.toList();
-    final bobotPerKriteria = 1.0 / kriteriaNama.length;
+
+    // Bobot yang sudah ditentukan
+    const Map<String, double> bobotKriteria = {
+      'rata_rata_nilai_produktif': 0.35,
+      'nilai_sikap': 0.30,
+      'jumlah_absen': 0.20,
+      'rata_rata_nilai_raport': 0.15,
+    };
 
     return kriteriaNama.map((nama) {
+      // jumlah_absen adalah cost (semakin kecil semakin baik)
+      // sisanya benefit (semakin besar semakin baik)
+      final lowerNama = nama.toLowerCase();
+      final isCost = lowerNama == 'jumlah_absen';
+      
+      // Ambil bobot dari map, default ke rata jika tidak ditemukan
+      final bobot = bobotKriteria[lowerNama] ?? (1.0 / kriteriaNama.length);
+      
       return KriteriaModel(
         nama: nama,
-        bobot: bobotPerKriteria,
-        type: KriteriaType.benefit,
+        bobot: bobot,
+        type: isCost ? KriteriaType.cost : KriteriaType.benefit,
       );
     }).toList();
   }

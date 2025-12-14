@@ -17,8 +17,13 @@ class SiswaModel {
 
   factory SiswaModel.fromMap(Map<String, dynamic> map) {
     final nilai = <String, double>{};
+    
+    // Kolom yang bukan kriteria (tidak dihitung nilainya)
+    final excludedKeys = {'id', 'no', 'nama', 'kelas'};
+    
     map.forEach((key, value) {
-      if (key != 'id' && key != 'nama' && key != 'kelas' && key != 'No') {
+      final lowerKey = key.toString().toLowerCase();
+      if (!excludedKeys.contains(lowerKey)) {
         if (value is num) {
           nilai[key] = value.toDouble();
         } else if (value is String) {
@@ -31,10 +36,12 @@ class SiswaModel {
     });
 
     return SiswaModel(
-      id: map['id']?.toString() ?? map['No']?.toString() ?? '',
+      id: map['id']?.toString() ?? map['no']?.toString() ?? map['No']?.toString() ?? '',
       nama: map['nama']?.toString() ?? map['Nama']?.toString() ?? '',
-      kelas: map['kelas']?.toString() ?? map['Kelas']?.toString() ?? '',
+      kelas: map['kelas']?.toString() ?? map['Kelas']?.toString() ?? '-',
       nilai: nilai,
+      skorTopsis: (map['skorTopsis'] as num?)?.toDouble(),
+      ranking: map['ranking'] as int?,
     );
   }
 

@@ -8,6 +8,7 @@ import '../widgets/app_header.dart';
 import '../widgets/app_footer.dart';
 import '../widgets/hero_section.dart';
 import '../widgets/info_section.dart';
+import '../widgets/usage_guide_section.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -25,6 +26,7 @@ class HomeView extends GetView<HomeController> {
                 children: [
                   const HeroSection(),
                   _buildInfoSections(context),
+                  const UsageGuideSection(),
                   const AppFooter(),
                 ],
               ),

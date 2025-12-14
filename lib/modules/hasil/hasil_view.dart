@@ -47,6 +47,8 @@ class HasilView extends GetView<HasilController> {
           children: [
             _buildHeader(context),
             const SizedBox(height: AppConstants.paddingLG),
+            _buildKeyCard(context),
+            const SizedBox(height: AppConstants.paddingLG),
             _buildResultCard(context),
             const SizedBox(height: AppConstants.paddingLG),
             _buildKriteriaSection(context),
@@ -92,6 +94,92 @@ class HasilView extends GetView<HasilController> {
         )),
       ],
     );
+  }
+
+  Widget _buildKeyCard(BuildContext context) {
+    final isMobile = ResponsiveHelper.isMobile(context);
+
+    return Obx(() {
+      final key = controller.generatedKey.value;
+      if (key.isEmpty) return const SizedBox.shrink();
+
+      return Container(
+        padding: EdgeInsets.all(isMobile ? AppConstants.paddingMD : AppConstants.paddingLG),
+        decoration: BoxDecoration(
+          color: Colors.green.shade50,
+          borderRadius: BorderRadius.circular(AppConstants.borderRadiusLG),
+          border: Border.all(color: Colors.green.shade200),
+        ),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.check_circle, color: Colors.green.shade600, size: 24),
+                const SizedBox(width: AppConstants.paddingSM),
+                Text(
+                  'Perhitungan Berhasil!',
+                  style: TextStyle(
+                    fontSize: isMobile ? 16 : 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green.shade700,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: AppConstants.paddingMD),
+            Text(
+              'Simpan key berikut untuk mengakses hasil di kemudian hari:',
+              style: TextStyle(
+                fontSize: isMobile ? 12 : 14,
+                color: Colors.green.shade600,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: AppConstants.paddingMD),
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppConstants.paddingLG,
+                vertical: AppConstants.paddingMD,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(AppConstants.borderRadiusMD),
+                border: Border.all(color: Colors.green.shade300),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.key, color: Colors.green.shade600, size: 20),
+                  const SizedBox(width: AppConstants.paddingSM),
+                  SelectableText(
+                    key,
+                    style: TextStyle(
+                      fontSize: isMobile ? 16 : 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green.shade700,
+                      letterSpacing: 1.5,
+                    ),
+                  ),
+                  const SizedBox(width: AppConstants.paddingMD),
+                  _CopyButton(onTap: controller.copyKeyToClipboard),
+                ],
+              ),
+            ),
+            const SizedBox(height: AppConstants.paddingMD),
+            Text(
+              'Gunakan key ini di menu Riwayat untuk melihat atau download hasil',
+              style: TextStyle(
+                fontSize: 11,
+                color: Colors.green.shade500,
+                fontStyle: FontStyle.italic,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      );
+    });
   }
 
   Widget _buildResultCard(BuildContext context) {
@@ -514,6 +602,13 @@ class HasilView extends GetView<HasilController> {
         alignment: WrapAlignment.center,
         children: [
           _ActionButton(
+            label: 'Download PDF',
+            icon: Icons.picture_as_pdf,
+            isPrimary: true,
+            onTap: controller.downloadPdf,
+            color: Colors.red,
+          ),
+          _ActionButton(
             label: 'Upload File Baru',
             icon: Icons.upload_file,
             isPrimary: true,
@@ -526,6 +621,44 @@ class HasilView extends GetView<HasilController> {
             onTap: controller.goToRiwayat,
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _CopyButton extends StatefulWidget {
+  final VoidCallback onTap;
+
+  const _CopyButton({required this.onTap});
+
+  @override
+  State<_CopyButton> createState() => _CopyButtonState();
+}
+
+class _CopyButtonState extends State<_CopyButton> {
+  bool _isHovering = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovering = true),
+      onExit: (_) => setState(() => _isHovering = false),
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: _isHovering ? Colors.green.shade100 : Colors.transparent,
+            borderRadius: BorderRadius.circular(AppConstants.borderRadiusSM),
+          ),
+          child: Icon(
+            Icons.copy,
+            size: 20,
+            color: _isHovering ? Colors.green.shade700 : Colors.green.shade500,
+          ),
+        ),
       ),
     );
   }
@@ -573,12 +706,14 @@ class _ActionButton extends StatefulWidget {
   final IconData icon;
   final bool isPrimary;
   final VoidCallback onTap;
+  final Color? color;
 
   const _ActionButton({
     required this.label,
     required this.icon,
     required this.isPrimary,
     required this.onTap,
+    this.color,
   });
 
   @override
@@ -590,6 +725,11 @@ class _ActionButtonState extends State<_ActionButton> {
 
   @override
   Widget build(BuildContext context) {
+    final buttonColor = widget.color ?? AppColors.primary;
+    final darkColor = widget.color != null 
+        ? HSLColor.fromColor(widget.color!).withLightness(0.3).toColor()
+        : AppColors.primaryDark;
+
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovering = true),
       onExit: (_) => setState(() => _isHovering = false),
@@ -604,16 +744,16 @@ class _ActionButtonState extends State<_ActionButton> {
           ),
           decoration: BoxDecoration(
             color: widget.isPrimary
-                ? (_isHovering ? AppColors.primaryDark : AppColors.primary)
-                : (_isHovering ? AppColors.primary.withOpacity(0.1) : AppColors.surface),
+                ? (_isHovering ? darkColor : buttonColor)
+                : (_isHovering ? buttonColor.withOpacity(0.1) : AppColors.surface),
             borderRadius: BorderRadius.circular(AppConstants.borderRadiusMD),
             border: widget.isPrimary
                 ? null
-                : Border.all(color: AppColors.primary),
+                : Border.all(color: buttonColor),
             boxShadow: widget.isPrimary
                 ? [
                     BoxShadow(
-                      color: AppColors.primary.withOpacity(_isHovering ? 0.4 : 0.3),
+                      color: buttonColor.withOpacity(_isHovering ? 0.4 : 0.3),
                       blurRadius: _isHovering ? 15 : 10,
                       offset: Offset(0, _isHovering ? 6 : 4),
                     ),
@@ -626,7 +766,7 @@ class _ActionButtonState extends State<_ActionButton> {
               Icon(
                 widget.icon,
                 size: 20,
-                color: widget.isPrimary ? Colors.white : AppColors.primary,
+                color: widget.isPrimary ? Colors.white : buttonColor,
               ),
               const SizedBox(width: AppConstants.paddingSM),
               Text(
@@ -634,7 +774,7 @@ class _ActionButtonState extends State<_ActionButton> {
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
-                  color: widget.isPrimary ? Colors.white : AppColors.primary,
+                  color: widget.isPrimary ? Colors.white : buttonColor,
                 ),
               ),
             ],
