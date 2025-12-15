@@ -52,16 +52,13 @@ class AppHeader extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: AppColors.primary,
-              borderRadius: BorderRadius.circular(AppConstants.borderRadiusSM),
-            ),
-            child: const Icon(
-              Icons.school,
-              color: Colors.white,
-              size: 24,
+          ClipRRect(
+            borderRadius: BorderRadius.circular(AppConstants.borderRadiusSM),
+            child: Image.asset(
+              'web/favicon.png',
+              width: 40,
+              height: 40,
+              fit: BoxFit.cover,
             ),
           ),
           if (!isMobile) ...[

@@ -42,10 +42,17 @@ class HomeView extends GetView<HomeController> {
     final padding = ResponsiveHelper.getHorizontalPadding(context);
 
     return Container(
-      constraints: const BoxConstraints(maxWidth: AppConstants.maxWidth),
-      padding: padding,
-      margin: const EdgeInsets.only(bottom: AppConstants.paddingXL),
-      child: isDesktop
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: const Color(0xFF4CAF50).withOpacity(0.08),
+      ),
+      padding: EdgeInsets.symmetric(
+        vertical: AppConstants.paddingXL,
+      ),
+      child: Container(
+        constraints: const BoxConstraints(maxWidth: AppConstants.maxWidth),
+        padding: padding,
+        child: isDesktop
           ? IntrinsicHeight(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -83,6 +90,7 @@ class HomeView extends GetView<HomeController> {
                 ),
               ],
             ),
+      ),
     );
   }
 }

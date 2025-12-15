@@ -51,7 +51,7 @@ class _HeroSectionState extends State<HeroSection> {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: AppConstants.paddingMD),
-          _buildDownloadTemplateLink(isMobile),
+          _buildTemplateInfoBox(isMobile),
           SizedBox(
             height: isMobile ? AppConstants.paddingLG : AppConstants.paddingXL,
           ),
@@ -147,41 +147,86 @@ class _HeroSectionState extends State<HeroSection> {
     });
   }
 
-  Widget _buildDownloadTemplateLink(bool isMobile) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: controller.downloadTemplate,
-        child: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppConstants.paddingMD,
-            vertical: AppConstants.paddingSM,
-          ),
-          decoration: BoxDecoration(
-            color: AppColors.primary.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(AppConstants.borderRadiusSM),
-            border: Border.all(color: AppColors.primary.withOpacity(0.3)),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
+  Widget _buildTemplateInfoBox(bool isMobile) {
+    return Container(
+      constraints: BoxConstraints(maxWidth: isMobile ? double.infinity : 600),
+      padding: const EdgeInsets.all(AppConstants.paddingMD),
+      decoration: BoxDecoration(
+        color: Colors.amber.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(AppConstants.borderRadiusMD),
+        border: Border.all(color: Colors.amber.withOpacity(0.5)),
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                Icons.download,
-                size: isMobile ? 16 : 18,
-                color: AppColors.primary,
+                Icons.info_outline,
+                size: isMobile ? 18 : 20,
+                color: Colors.amber[800],
               ),
               const SizedBox(width: 8),
-              Text(
-                'Download Template Excel',
-                style: TextStyle(
-                  fontSize: isMobile ? 12 : 14,
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.w600,
+              Flexible(
+                child: Text(
+                  'Penting: Gunakan template yang disediakan',
+                  style: TextStyle(
+                    fontSize: isMobile ? 13 : 15,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.amber[800],
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ),
             ],
           ),
-        ),
+          const SizedBox(height: AppConstants.paddingSM),
+          Text(
+            'Pastikan file Excel yang diupload sesuai dengan format template agar perhitungan TOPSIS dapat berjalan dengan benar.',
+            style: TextStyle(
+              fontSize: isMobile ? 12 : 13,
+              color: Colors.amber[900],
+              height: 1.4,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: AppConstants.paddingMD),
+          MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              onTap: controller.downloadTemplate,
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppConstants.paddingMD,
+                  vertical: AppConstants.paddingSM,
+                ),
+                decoration: BoxDecoration(
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.circular(AppConstants.borderRadiusSM),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.download,
+                      size: isMobile ? 16 : 18,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Download Template Excel',
+                      style: TextStyle(
+                        fontSize: isMobile ? 12 : 14,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
