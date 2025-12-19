@@ -79,7 +79,14 @@ class AppHeader extends StatelessWidget {
 
   Widget _buildMenu(BuildContext context) {
     return _HoverButton(
-      onTap: () => Get.toNamed(AppRoutes.riwayat),
+      onTap: () {
+        final currentRoute = Get.currentRoute;
+        if (currentRoute == AppRoutes.hasil) {
+          Get.offNamed(AppRoutes.riwayat);
+        } else if (currentRoute != AppRoutes.riwayat) {
+          Get.toNamed(AppRoutes.riwayat);
+        }
+      },
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

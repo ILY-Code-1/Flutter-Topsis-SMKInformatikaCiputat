@@ -79,7 +79,7 @@ class HasilController extends GetxController {
   }
 
   void goToRiwayat() {
-    Get.toNamed(AppRoutes.riwayat);
+    Get.offNamed(AppRoutes.riwayat);
   }
 
   void uploadNewFile() {
