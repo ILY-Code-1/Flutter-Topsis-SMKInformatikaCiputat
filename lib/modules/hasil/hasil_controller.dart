@@ -71,11 +71,7 @@ class HasilController extends GetxController {
   }
 
   void goBack() {
-    if (isFromRiwayat.value) {
-      Get.back();
-    } else {
-      Get.offAllNamed(AppRoutes.home);
-    }
+    Get.offNamed(AppRoutes.riwayat);
   }
 
   void goToRiwayat() {
